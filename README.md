@@ -3,7 +3,7 @@
 A single-page, searchable directory of useful AI tools — organized into 12 categories covering chatbots, coding, writing, design, video, audio, data, automation, and more. Built as a clean, dark-themed static website with live search.
 
 **🔗 Live demo:** _add your deployed link here
-
+https://useful-ai-tools-puce.vercel.app/
 
 ## ✨ Features
 
