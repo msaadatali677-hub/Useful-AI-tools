@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Directory — CodeWithSaadat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --bg-raised: #12161f;
+            --line: #232838;
+            --text: #e8eaf0;
+            --text-dim: #9aa1b5;
+            --accent: #8b7cf6;
+            --accent-2: #38d6c4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+        }
+
+        /* Background texture: faint grid, characteristic of tool ecosystems */
+        .grid-field {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 64px 64px;
+            opacity: 0.35;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 75%);
+        }
+
+        header {
+            position: relative;
+            z-index: 1;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 88px 24px 56px;
+        }
+
+        .eyebrow {
+            font-size: 14px;
+            color: var(--accent-2);
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        header h1 {
+            font-size: clamp(38px, 6vw, 64px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            max-width: 14ch;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 18px;
+            max-width: 52ch;
+            margin-top: 20px;
+        }
+
+        .credit {
+            margin-top: 28px;
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+
+        .credit span {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .credit-links {
+            display: flex;
+            gap: 18px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .credit-links a {
+            font-size: 14px;
+            color: var(--accent-2);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s ease;
+        }
+
+        .credit-links a:hover {
+            border-bottom-color: var(--accent-2);
+        }
+
+        .search-wrap {
+            position: sticky;
+            top: 16px;
+            z-index: 5;
+            max-width: 980px;
+            margin: 0 auto 8px;
+            padding: 0 24px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-raised);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .search-box svg {
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-dim);
+        }
+
+        #result-count {
+            font-size: 13px;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 24px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .category {
+            background: var(--bg-raised);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 24px;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .category.hidden {
+            display: none;
+        }
+
+        .cat-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .cat-icon {
+            font-size: 22px;
+        }
+
+        .cat-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tool {
+            font-size: 14px;
+            color: var(--text);
+            background: #1a1f2c;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 7px 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+        }
+
+        .tool:hover {
+            border-color: var(--accent-2);
+            background: #1e2433;
+        }
+
+        .tool svg {
+            opacity: 0.5;
+            flex-shrink: 0;
+        }
+
+        .tool.match {
+            border-color: var(--accent);
+            color: #d9d3ff;
+        }
+
+        .tool.dim {
+            opacity: 0.3;
+        }
+
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid-field"></div>
+
+    <header>
+        <div class="eyebrow">A field guide to what's out there</div>
+        <h1>Useful AI tools you should know</h1>
+        <p>Almost every kind of work has an AI tool attached to it now. Here's a categorized map of what's out there —
+            search for a name, or scroll through by category.</p>
+        <div class="credit">Curated by <span>CodeWithSaadat</span></div>
+        <div class="credit-links">
+            <a href="https://codewithsaadat.netlify.app/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+            <a href="https://www.linkedin.com/in/saadat-ali-3021ab3a5/" target="_blank"
+                rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://github.com/msaadatali677-hub" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </header>
+
+    <div class="search-wrap">
+        <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="search" placeholder="Search a tool, e.g. Claude, Runway, Zapier…" autocomplete="off">
+            <span id="result-count"></span>
+        </div>
+    </div>
+
+    <main id="grid"></main>
+
+
+    <script>
+        const data = [
+            {
+                icon: "🧠", title: "AI Chatbots & General AI", tools: [
+                    ["ChatGPT", "https://chat.openai.com"],
+                    ["Claude", "https://claude.ai"],
+                    ["Gemini", "https://gemini.google.com"],
+                    ["Microsoft Copilot", "https://copilot.microsoft.com"],
+                    ["Grok", "https://grok.com"],
+                    ["DeepSeek", "https://www.deepseek.com"],
+                ]
+            },
+            {
+                icon: "🔎", title: "Research & Learning", tools: [
+                    ["Perplexity", "https://www.perplexity.ai"],
+                    ["NotebookLM", "https://notebooklm.google.com"],
+                    ["Elicit", "https://elicit.com"],
+                    ["Consensus", "https://consensus.app"],
+                    ["Scite", "https://scite.ai"],
+                    ["Wolfram Alpha", "https://www.wolframalpha.com"],
+                ]
+            },
+            {
+                icon: "💻", title: "Coding & Development", tools: [
+                    ["GitHub Copilot", "https://github.com/features/copilot"],
+                    ["Cursor", "https://www.cursor.com"],
+                    ["Replit", "https://replit.com"],
+                    ["Windsurf", "https://windsurf.com"],
+                    ["Tabnine", "https://www.tabnine.com"],
+                    ["Amazon Q Developer", "https://aws.amazon.com/q/developer/"],
+                    ["Lovable", "https://lovable.dev"],
+                    ["v0", "https://v0.dev"],
+                    ["Bolt.new", "https://bolt.new"],
+                ]
+            },
+            {
+                icon: "✍️", title: "Writing & Content", tools: [
+                    ["Grammarly", "https://www.grammarly.com"],
+                    ["Jasper", "https://www.jasper.ai"],
+                    ["Copy.ai", "https://www.copy.ai"],
+                    ["Writesonic", "https://writesonic.com"],
+                    ["QuillBot", "https://quillbot.com"],
+                    ["Notion AI", "https://www.notion.com/product/ai"],
+                ]
+            },
+            {
+                icon: "🎨", title: "Image Generation & Design", tools: [
+                    ["Midjourney", "https://www.midjourney.com"],
+                    ["Adobe Firefly", "https://www.adobe.com/products/firefly.html"],
+                    ["Canva", "https://www.canva.com"],
+                    ["Ideogram", "https://ideogram.ai"],
+                    ["Leonardo AI", "https://leonardo.ai"],
+                    ["Recraft", "https://www.recraft.ai"],
+                    ["Stable Diffusion", "https://stability.ai"],
+                ]
+            },
+            {
+                icon: "🎬", title: "Video Creation & Editing", tools: [
+                    ["Runway", "https://runwayml.com"],
+                    ["HeyGen", "https://www.heygen.com"],
+                    ["Synthesia", "https://www.synthesia.io"],
+                    ["Descript", "https://www.descript.com"],
+                    ["CapCut", "https://www.capcut.com"],
+                    ["VEED", "https://www.veed.io"],
+                    ["InVideo AI", "https://invideo.io"],
+                    ["Kling AI", "https://klingai.com"],
+                ]
+            },
+            {
+                icon: "🎙️", title: "Voice & Audio", tools: [
+                    ["ElevenLabs", "https://elevenlabs.io"],
+                    ["Murf", "https://murf.ai"],
+                    ["Adobe Podcast", "https://podcast.adobe.com"],
+                    ["Suno", "https://suno.com"],
+                    ["Udio", "https://www.udio.com"],
+                    ["Otter.ai", "https://otter.ai"],
+                ]
+            },
+            {
+                icon: "📊", title: "Data Analysis & BI", tools: [
+                    ["Julius AI", "https://julius.ai"],
+                    ["Rows", "https://rows.com"],
+                    ["Akkio", "https://www.akkio.com"],
+                    ["Power BI Copilot", "https://www.microsoft.com/en-us/power-platform/products/power-bi/copilot"],
+                    ["ChatGPT", "https://chat.openai.com"],
+                    ["Tableau AI", "https://www.tableau.com/ai"],
+                ]
+            },
+            {
+                icon: "📑", title: "Documents & Presentations", tools: [
+                    ["Gamma", "https://gamma.app"],
+                    ["Beautiful.ai", "https://www.beautiful.ai"],
+                    ["Tome", "https://tome.app"],
+                    ["ChatPDF", "https://www.chatpdf.com"],
+                    ["Humata", "https://www.humata.ai"],
+                ]
+            },
+            {
+                icon: "⚙️", title: "Automation & Workflows", tools: [
+                    ["Zapier", "https://zapier.com"],
+                    ["Make", "https://www.make.com"],
+                    ["n8n", "https://n8n.io"],
+                    ["Microsoft Power Automate", "https://www.microsoft.com/en-us/power-platform/products/power-automate"],
+                    ["Relevance AI", "https://relevanceai.com"],
+                ]
+            },
+            {
+                icon: "🧑‍💼", title: "Meetings & Productivity", tools: [
+                    ["Fireflies.ai", "https://fireflies.ai"],
+                    ["Fathom", "https://fathom.video"],
+                    ["Avoma", "https://www.avoma.com"],
+                    ["Granola", "https://www.granola.ai"],
+                ]
+            },
+            {
+                icon: "🤖", title: "AI Agents & Development", tools: [
+                    ["Manus", "https://manus.im"],
+                    ["CrewAI", "https://www.crewai.com"],
+                    ["LangChain", "https://www.langchain.com"],
+                    ["LlamaIndex", "https://www.llamaindex.ai"],
+                    ["OpenAI API", "https://platform.openai.com"],
+                    ["Anthropic API", "https://www.anthropic.com/api"],
+                    ["Google AI Studio", "https://aistudio.google.com"],
+                ]
+            },
+        ];
+
+        const grid = document.getElementById('grid');
+        const searchInput = document.getElementById('search');
+        const resultCount = document.getElementById('result-count');
+
+        function render() {
+            grid.innerHTML = '';
+            data.forEach(cat => {
+                const catEl = document.createElement('div');
+                catEl.className = 'category';
+                catEl.dataset.title = cat.title.toLowerCase();
+
+                const head = document.createElement('div');
+                head.className = 'cat-head';
+                head.innerHTML = `<span class="cat-icon">${cat.icon}</span><span class="cat-title">${cat.title}</span>`;
+                catEl.appendChild(head);
+
+                const toolsEl = document.createElement('div');
+                toolsEl.className = 'tools';
+                cat.tools.forEach(([name, url]) => {
+                    const t = document.createElement('a');
+                    t.className = 'tool';
+                    t.href = url;
+                    t.target = '_blank';
+                    t.rel = 'noopener noreferrer';
+                    t.dataset.name = name.toLowerCase();
+                    t.innerHTML = `${name}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>`;
+                    toolsEl.appendChild(t);
+                });
+                catEl.appendChild(toolsEl);
+                grid.appendChild(catEl);
+            });
+        }
+        render();
+
+        searchInput.addEventListener('input', (e) => {
+            const q = e.target.value.trim().toLowerCase();
+            let matches = 0;
+
+            document.querySelectorAll('.category').forEach(catEl => {
+                const toolEls = catEl.querySelectorAll('.tool');
+                let anyMatch = q === '';
+
+                toolEls.forEach(t => {
+                    const isMatch = q !== '' && t.dataset.name.includes(q);
+                    t.classList.toggle('match', isMatch);
+                    t.classList.toggle('dim', q !== '' && !isMatch);
+                    if (isMatch) { matches++; anyMatch = true; }
+                });
+
+                catEl.classList.toggle('hidden', q !== '' && !anyMatch);
+            });
+
+            resultCount.textContent = q === '' ? '' : (matches + ' match' + (matches === 1 ? '' : 'es'));
+        });
+    </script>
+
+</body>
+
+</html>
